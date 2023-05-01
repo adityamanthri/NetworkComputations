@@ -1,3 +1,4 @@
+import java.nio.file.FileStore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +9,9 @@ import java.util.function.*;
 public class Operations {
 
     public static double[][] mtf(double[][] m){
+        if(m.length == 1){
+            return new double[][]{{0d}};
+        }
         //We actually need to comb the unconnected nodes out of m first
         HashSet<Integer> IGNORE = new HashSet<>();
         for(int  i = 0; i < m.length; ++i){
@@ -289,6 +293,35 @@ public class Operations {
             }
         }
         return erG;
+    }
+
+    public static ArrayList<double[][]> AGGREGATED_FST(int graph_size, int steps, float edgeProb){
+        ArrayList<double[][]> traj = new ArrayList<>();
+        SGraph graph = new SGraph(graph_size);
+        for(int i = 0; i < steps; ++i){
+            graph.ERStep(edgeProb);
+            double[][] FST = new double[graph_size][graph_size];
+            for(int j = 0; j < graph_size; ++j){
+                for(int k = 0; k < graph_size; ++k){
+                    FST[j][k] = 1d;
+                }
+            }
+            ArrayList<SGraph> allSubComps = graph.formComponentList();
+            for(SGraph subComp: allSubComps){
+                double[][] subfst = mtf(subComp.edge_weights);
+                for(int j = 0; j < subfst.length; ++j){
+                    for(int k = 0; k < subfst.length; ++k){
+                        FST[subComp.nodeList.get(j)][subComp.nodeList.get(k)] = subfst[j][k];
+                        FST[subComp.nodeList.get(k)][subComp.nodeList.get(j)] = subfst[k][j];
+                    }
+                }
+            }
+            traj.add(FST);
+
+        }
+
+        return traj;
+
     }
 }
 class GraphHistoPair{

@@ -6,6 +6,16 @@ public class MathSolver {
         fact_memo = new HashMap<>();
     }
 
+    public double frobNorm(double[][] m){
+        double sum = 0.0;
+        for(int i = 0; i < m.length; ++i){
+            for(int j = 0; j < m.length; ++j){
+                sum+=m[i][j];
+            }
+        }
+        return Math.sqrt(sum);
+    }
+
     public long factorial(int x){
         if(fact_memo.containsKey(x)){
             return fact_memo.get(x);
