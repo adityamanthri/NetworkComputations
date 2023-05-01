@@ -16,6 +16,35 @@ public class MathSolver {
         return Math.sqrt(sum);
     }
 
+    public double[][] matMul(double[][] m1, double[][] m2) throws Exception{
+        if(m1[0].length != m2.length){
+            throw new Exception("Size does not match up");
+        }
+        double[][] res = new double[m1.length][m2[0].length];
+        for(int i = 0; i < m1.length; ++i){
+            for(int j = 0; j < m2[0].length; ++j){
+                double sum = 0.0;
+                for (int k = 0; k < m1[0].length; ++k){
+                    sum += m1[i][k]*m2[k][j];
+                }
+                res[i][j] = sum;
+            }
+        }
+        return res;
+    }
+
+    public double[][] scaleMat(double sc, double[][] m){
+        double[][] res = m.clone();
+        for(int i = 0; i < res.length; ++i){
+            for(int j = 0; j < res[0].length; ++j){
+                res[i][j] = m[i][j]*sc;
+            }
+        }
+        return res;
+    }
+
+
+
     public long factorial(int x){
         if(fact_memo.containsKey(x)){
             return fact_memo.get(x);
