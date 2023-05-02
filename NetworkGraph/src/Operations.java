@@ -295,6 +295,18 @@ public class Operations {
         return erG;
     }
 
+    public static double[][] MDSPoints(ArrayList<double[][]> FST_CHAIN) throws Exception {
+        double[][] distArr = new double[FST_CHAIN.size()][FST_CHAIN.size()];
+        for(int i = 0; i < distArr.length; ++i){
+            for(int j = i + 1; j < distArr.length; ++j){
+                double dist = Math.abs(MathSolver.frobNorm(FST_CHAIN.get(i)) - MathSolver.frobNorm(FST_CHAIN.get(j)));
+                distArr[i][j] = dist;
+                distArr[j][i] = dist;
+            }
+        }
+        return MathSolver.metricMDS(distArr);
+    }
+
     public static ArrayList<double[][]> AGGREGATED_FST(int graph_size, int steps, float edgeProb){
         ArrayList<double[][]> traj = new ArrayList<>();
         SGraph graph = new SGraph(graph_size);

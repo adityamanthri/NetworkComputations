@@ -31,11 +31,13 @@ public class SGraph {
     }
 
     public void ERStep(float prob){
+        int numAdded = 0;
         for(int i = 0; i < size; ++i){
             for(int j = i + 1; j < size; ++j){
                 if(!adj.get(i).contains(j) && !adj.get(j).contains(i)){
                     Random r = new Random();
                     if(r.nextFloat() < prob){
+                        ++numAdded;
                         edge_weights[i][j] = 1.0;
                         edge_weights[j][i] = 1.0;
                         adj.get(i).add(j);
@@ -43,6 +45,10 @@ public class SGraph {
                     }
                 }
             }
+        }
+        //If we didn't add any edges, lets add another ER step
+        if(numAdded == 0){
+            ERStep(prob);
         }
     }
 

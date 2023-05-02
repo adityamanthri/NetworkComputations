@@ -183,15 +183,44 @@ class GraphFSTTrajectory extends Thread{
 
     }
     public void run(){
-        ArrayList<double[][]> FSTs= Operations.AGGREGATED_FST(25, 20, 0.01f);
-        for(int i = 0; i < FSTs.size(); ++i){
-            System.out.println("Step " + i);
-            for(int j = 0; j < FSTs.get(i).length; ++j){
-                for(int k = 0; k < FSTs.get(i).length; ++k){
-                    System.out.print(" " + FSTs.get(i)[j][k]);
-                }
-                System.out.println();
+
+        try {
+            ArrayList<double[][]> FSTs= Operations.AGGREGATED_FST(30, 40, 0.01f);
+            double[][] points = Operations.MDSPoints(FSTs);
+
+            //process points
+            double minXVal = points[0][0];
+            double minYVal = points[0][1];
+            for(int i = 0; i < points.length ;++i){
+                minXVal = Math.min(points[i][0], minXVal);
+                minYVal = Math.min(points[i][1], minYVal);
             }
+            for(int i = 0; i < points.length ;++i){
+                points[i][0] = Math.log10(points[i][0] - 2*minXVal);
+                points[i][1] = Math.log10(points[i][1] - 2*minYVal);
+            }
+
+            JFrame frame = new JFrame();
+            // set size, layout and location for frame.
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            Plotter plt = new Plotter(60, 60, 60,60, false, 5);
+            frame.setTitle("FST MDS");
+            ArrayList<Double>[] k = new ArrayList[2];
+            k[0] = new ArrayList<>();
+            k[1] = new ArrayList<>();
+            for(int i = 0; i < points.length; ++i){
+                k[0].add(points[i][0]);
+                k[1].add(points[i][1]);
+            }
+            plt.populatelists(k[0],k[1]);
+            plt.setColorscaling(ColorMode.INDEX);
+            frame.add(plt);
+            frame.setSize(550, 550);
+            frame.setLocation(0, 0);
+            frame.setVisible(true);
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
         }
     }
 }

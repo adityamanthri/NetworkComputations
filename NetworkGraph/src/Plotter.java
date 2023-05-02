@@ -429,6 +429,10 @@ public class Plotter extends JPanel{
             scalingList = Zcord;
             scalemin = zmin;
             scalemax = zmax;
+        }else if(colorscaling == ColorMode.INDEX){
+            scalemin = 0;
+            scalemax = Xcord.size();
+
         }else{
             scaleexist = false;
         }
@@ -437,12 +441,22 @@ public class Plotter extends JPanel{
             double x1 = graphXCords.get(i);
             double y1 = graphYCords.get(i);
             if(scaleexist){
-                double val = scalingList.get(i);
-                if(colorscaling == ColorMode.Y){
-                    val *= -1;
+                double val = i;
+                //If the scalingList is not null then we are using an axis scale
+                if(scalingList != null){
+                    val = scalingList.get(i);
+                    if(colorscaling == ColorMode.Y){
+                        val *= -1;
+                    }
                 }
                 graph.setColor(produceColor(val, scalemin, scalemax));
 
+            }
+            else{
+                graph.setColor(Color.BLACK);
+            }
+            if(i == 0){
+                graph.setColor(Color.RED);
             }
             graph.fill(new Ellipse2D.Double(x1-2, y1-2, 4, 4));
 
@@ -525,5 +539,5 @@ public class Plotter extends JPanel{
 }
 
 enum ColorMode{
-    X, Y, Z;
+    X, Y, Z, INDEX;
 }
