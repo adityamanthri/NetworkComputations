@@ -455,9 +455,6 @@ public class Plotter extends JPanel{
             else{
                 graph.setColor(Color.BLACK);
             }
-            if(i == 0){
-                graph.setColor(Color.RED);
-            }
             graph.fill(new Ellipse2D.Double(x1-2, y1-2, 4, 4));
 
             if(i < XYlines.size()){
