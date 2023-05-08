@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class MathSolver {
-    HashMap<Integer, Long> fact_memo;
+    static HashMap<Integer, Long> fact_memo = new HashMap<>();
     public MathSolver(){
         fact_memo = new HashMap<>();
     }
@@ -91,7 +91,7 @@ public class MathSolver {
         return matMul(eigenvectorsK, eigenvaluesK);
     }
 
-    public long factorial(int x){
+    public static long factorial(int x){
         if(fact_memo.containsKey(x)){
             return fact_memo.get(x);
         }
@@ -103,15 +103,15 @@ public class MathSolver {
         return result;
     }
 
-    public long comb(int n, int k){
+    public static long comb(int n, int k){
         return factorial(n)/(factorial(k)*factorial(n-k));
     }
-    public int altcombo(int n, int k){
+    public static long altcombo(int n, int k){
         double base = 1d;
         for(int i = 0; i < Math.min(k, n-k); ++i){
             base *= (n-i)/(double)(k-i);
         }
-        return (int)base;
+        return (long)base;
     }
     public void makeProbMatrix(double[][] input){
         for(int i = 0; i < input.length; ++i){

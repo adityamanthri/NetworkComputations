@@ -5,16 +5,35 @@ import java.util.ArrayList;
 
 public class DisplayMain {
     public static void main(String...args) throws Exception{
-        SizeVMeanInDegree t1 = new SizeVMeanInDegree();
-        t1.start();
-        LargeCompGrowth t2 = new LargeCompGrowth();
-        t2.start();
-        growthVInDegreeAndSize t3 = new growthVInDegreeAndSize();
-        t3.start();
-        graphGrowth t4 = new graphGrowth();
-        t4.start();
+//        ProbabilityThread p1 = new ProbabilityThread(0);
+//        ProbabilityThread p2 = new ProbabilityThread(1);
+//        ProbabilityThread p3 = new ProbabilityThread(2);
+//        ProbabilityThread p4 = new ProbabilityThread(3);
+//        ProbabilityThread p5 = new ProbabilityThread(4);
+//        ProbabilityThread p6 = new ProbabilityThread(5);
+//        p1.start();
+//        p2.start();
+//        p3.start();
+//        p4.start();
+//        p5.start();
+//        p6.start();
+
+//        SizeVMeanInDegree t1 = new SizeVMeanInDegree();
+//        t1.start();
+//        LargeCompGrowth t2 = new LargeCompGrowth();
+//        t2.start();
+//        growthVInDegreeAndSize t3 = new growthVInDegreeAndSize();
+//        t3.start();
+//        graphGrowth t4 = new graphGrowth();
+//        t4.start();
         GraphFSTTrajectory t5 = new GraphFSTTrajectory();
         t5.start();
+//
+//        t1.join();
+//        t2.join();
+//        t3.join();
+//        t4.join();
+        t5.join();
     }
 }
 class SizeVMeanInDegree extends Thread{
@@ -189,16 +208,16 @@ class GraphFSTTrajectory extends Thread{
             double[][] points = Operations.MDSPoints(FSTs);
 
             //process points
-            double minXVal = points[0][0];
-            double minYVal = points[0][1];
-            for(int i = 0; i < points.length ;++i){
-                minXVal = Math.min(points[i][0], minXVal);
-                minYVal = Math.min(points[i][1], minYVal);
-            }
-            for(int i = 0; i < points.length ;++i){
-                points[i][0] = Math.log10(points[i][0] - 2*minXVal);
-                points[i][1] = Math.log10(points[i][1] - 2*minYVal);
-            }
+//            double minXVal = points[0][0];
+//            double minYVal = points[0][1];
+//            for(int i = 0; i < points.length ;++i){
+//                minXVal = Math.min(points[i][0], minXVal);
+//                minYVal = Math.min(points[i][1], minYVal);
+//            }
+//            for(int i = 0; i < points.length ;++i){
+//                points[i][0] = Math.log10(points[i][0] - 2*minXVal);
+//                points[i][1] = Math.log10(points[i][1] - 2*minYVal);
+//            }
 
             JFrame frame = new JFrame();
             // set size, layout and location for frame.
@@ -222,5 +241,32 @@ class GraphFSTTrajectory extends Thread{
         catch (Exception e){
             System.out.println(e.toString());
         }
+    }
+}
+
+class ProbabilityThread extends Thread{
+
+
+    int k;
+    public ProbabilityThread(int k){
+        this.k = k;
+    }
+
+    public double PknowsK(){
+        return MathSolver.altcombo(10, k)*(Math.pow(0.3, k)*Math.pow(0.7, 10-k) + Math.pow(0.7,k)*Math.pow(0.3, 10-k) + Math.pow(0.95, k)*Math.pow(0.05, 10 - k))/3d;
+    }
+
+    public double P5CorrectGivenknowsK(){
+        return MathSolver.altcombo(10-k, 5 - k)*(Math.pow(1/3d, 5 - k)*Math.pow(2/3d, 5));
+    }
+
+
+    public void run(){
+
+        double prob = PknowsK()*P5CorrectGivenknowsK();
+
+        System.out.println("k = " + k + " : " + prob);
+        System.out.println("Knowsk = " + k + " : " + PknowsK());
+
     }
 }

@@ -299,7 +299,15 @@ public class Operations {
         double[][] distArr = new double[FST_CHAIN.size()][FST_CHAIN.size()];
         for(int i = 0; i < distArr.length; ++i){
             for(int j = i + 1; j < distArr.length; ++j){
-                double dist = Math.abs(MathSolver.frobNorm(FST_CHAIN.get(i)) - MathSolver.frobNorm(FST_CHAIN.get(j)));
+                double[][] first = FST_CHAIN.get(i);
+                double[][] second = FST_CHAIN.get(j);
+                double dist = 0;
+                for(int k = 0; k < first.length; ++k){
+                    for(int l = 0; l < first[0].length; ++l){
+                        dist += Math.pow(first[k][l] - second[k][l],2);
+                    }
+                }
+                dist = Math.sqrt(dist);
                 distArr[i][j] = dist;
                 distArr[j][i] = dist;
             }
