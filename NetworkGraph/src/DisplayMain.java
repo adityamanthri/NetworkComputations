@@ -255,7 +255,7 @@ class GraphMigrationMDS extends Thread{
     public void run(){
 
         try {
-            ArrayList<double[][]> migrations = Operations.MigrationNetworkDecay(30);
+            ArrayList<double[][]> migrations = Operations.MigrationNetworkDecay(2);
 
             double[][] points = Operations.MDSPoints(migrations);
 

@@ -327,9 +327,7 @@ public class Operations {
             System.out.println(g.edgeList.size());
             double[][] instState = new double[starting_size][starting_size];
             for(int j = 0; j < starting_size; ++j){
-                for(int k = 0; k < starting_size; ++k){
-                    instState[j][k] = g.edge_weights[j][k];
-                }
+                System.arraycopy(g.edge_weights[j], 0, instState[j], 0, starting_size);
             }
             traj.add(instState);
             g.ERDecayStep();
