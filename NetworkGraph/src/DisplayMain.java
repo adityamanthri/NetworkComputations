@@ -26,14 +26,18 @@ public class DisplayMain {
 //        t3.start();
 //        graphGrowth t4 = new graphGrowth();
 //        t4.start();
-        GraphFSTTrajectory t5 = new GraphFSTTrajectory();
-        t5.start();
+//        GraphFSTTrajectory t5 = new GraphFSTTrajectory();
+//        t5.start();
+
+        GraphMigrationMDS t6 = new GraphMigrationMDS();
+        t6.start();
 //
 //        t1.join();
 //        t2.join();
 //        t3.join();
 //        t4.join();
-        t5.join();
+        //t5.join();
+        t6.join();
     }
 }
 class SizeVMeanInDegree extends Thread{
@@ -237,6 +241,56 @@ class GraphFSTTrajectory extends Thread{
             frame.setSize(550, 550);
             frame.setLocation(0, 0);
             frame.setVisible(true);
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+}
+
+class GraphMigrationMDS extends Thread{
+    public GraphMigrationMDS(){
+
+    }
+    public void run(){
+
+        try {
+            ArrayList<double[][]> migrations = Operations.MigrationNetworkDecay(30);
+
+            double[][] points = Operations.MDSPoints(migrations);
+
+            //process points
+//            double minXVal = points[0][0];
+//            double minYVal = points[0][1];
+//            for(int i = 0; i < points.length ;++i){
+//                minXVal = Math.min(points[i][0], minXVal);
+//                minYVal = Math.min(points[i][1], minYVal);
+//            }
+//            for(int i = 0; i < points.length ;++i){
+//                points[i][0] = Math.log10(points[i][0] - 2*minXVal);
+//                points[i][1] = Math.log10(points[i][1] - 2*minYVal);
+//            }
+            System.out.println("done");
+            JFrame frame = new JFrame();
+            System.out.println("done2");
+            // set size, layout and location for frame.
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            Plotter plt = new Plotter(60, 60, 60,60, false, 5);
+            frame.setTitle("MigrationNetwork MDS");
+            ArrayList<Double>[] k = new ArrayList[2];
+            k[0] = new ArrayList<>();
+            k[1] = new ArrayList<>();
+            for(int i = 0; i < points.length; ++i){
+                k[0].add(points[i][0]);
+                k[1].add(points[i][1]);
+            }
+            plt.populatelists(k[0],k[1]);
+            plt.setColorscaling(ColorMode.INDEX);
+            frame.add(plt);
+            frame.setSize(550, 550);
+            frame.setLocation(0, 0);
+            frame.setVisible(true);
+
         }
         catch (Exception e){
             System.out.println(e.toString());

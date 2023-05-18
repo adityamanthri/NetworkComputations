@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.nio.file.FileStore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -295,16 +296,19 @@ public class Operations {
         return erG;
     }
 
-    public static double[][] MDSPoints(ArrayList<double[][]> FST_CHAIN) throws Exception {
-        double[][] distArr = new double[FST_CHAIN.size()][FST_CHAIN.size()];
+    public static double[][] MDSPoints(ArrayList<double[][]> CHAIN) throws Exception {
+        double[][] distArr = new double[CHAIN.size()][CHAIN.size()];
+        int iter = 0;
         for(int i = 0; i < distArr.length; ++i){
             for(int j = i + 1; j < distArr.length; ++j){
-                double[][] first = FST_CHAIN.get(i);
-                double[][] second = FST_CHAIN.get(j);
+                double[][] first = CHAIN.get(i);
+                double[][] second = CHAIN.get(j);
                 double dist = 0;
                 for(int k = 0; k < first.length; ++k){
                     for(int l = 0; l < first[0].length; ++l){
+                        System.out.println(iter);
                         dist += Math.pow(first[k][l] - second[k][l],2);
+                        ++iter;
                     }
                 }
                 dist = Math.sqrt(dist);
@@ -313,6 +317,24 @@ public class Operations {
             }
         }
         return MathSolver.metricMDS(distArr);
+    }
+
+    public static ArrayList<double[][]> MigrationNetworkDecay(int starting_size){
+        ArrayList<double[][]> traj = new ArrayList<>();
+        SGraph g = new SGraph(starting_size);
+        g.makeDense();
+        while (g.edgeList.size() > 0){
+            System.out.println(g.edgeList.size());
+            double[][] instState = new double[starting_size][starting_size];
+            for(int j = 0; j < starting_size; ++j){
+                for(int k = 0; k < starting_size; ++k){
+                    instState[j][k] = g.edge_weights[j][k];
+                }
+            }
+            traj.add(instState);
+            g.ERDecayStep();
+        }
+        return traj;
     }
 
     public static ArrayList<double[][]> AGGREGATED_FST(int graph_size, int steps, float edgeProb){

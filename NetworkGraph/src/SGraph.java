@@ -52,6 +52,9 @@ public class SGraph {
     }
 
     public void ERDecayStep(){
+        if(edgeList.size() == 0){
+            return;
+        }
         Random r = new Random();
         int indexRemove = r.nextInt(edgeList.size());
         edgeUnordered removed = edgeList.remove(indexRemove);
